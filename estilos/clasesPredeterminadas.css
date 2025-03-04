@@ -1,0 +1,21 @@
+.borderRadius4 {
+    border-radius: 4px;
+}
+
+.blancoTranslucido {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.centrado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inputOculto {
+    position: absolute;
+    appearance: none;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}

@@ -1,0 +1,8 @@
+:root {
+    --borderRadius10: 10px;
+    --grisOscuro: rgb(28, 28, 28);
+    --margenPanel: 20px;
+    --anchoBoton: 32px;
+    --anchoPanel: 300px;
+    --transicionPanel: 1s ease-in-out;
+}

@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Anta");
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "anta";
+}
+
+body {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--grisOscuro);
+
+    .panel {
+        position: absolute;
+        left: calc(-1 * var(--anchoPanel));
+        width: var(--anchoPanel);
+        height: calc(100% - (2 * var(--margenPanel)));
+        border-radius: var(--borderRadius10);
+        transition: var(--transicionPanel);
+
+        &:has(.movimientoPanel .inputOculto:checked) {
+            left: calc(var(--margenPanel) - 2px);
+
+            & .movimientoPanel {
+                top: calc(100% - 120px);
+                color: red;
+            }
+        }
+
+        .movimientoPanel {
+            position: absolute;
+            top: 0;
+            right: calc(0% - (10px + var(--anchoBoton)));
+            width: var(--anchoBoton);
+            height: 120px;
+            font-weight: bold;
+            writing-mode: vertical-lr;
+            color: grey;
+            letter-spacing: 4px;
+    
+            border: 1px solid grey;
+            transition: var(--transicionPanel);
+        }
+    }
+}
