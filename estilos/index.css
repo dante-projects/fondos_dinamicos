@@ -1,12 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Anta");
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: "anta";
-}
-
 body {
     position: relative;
     width: 100vw;
@@ -19,6 +12,7 @@ body {
         width: var(--anchoPanel);
         height: calc(100% - (2 * var(--margenPanel)));
         border-radius: var(--borderRadius10);
+        padding: 20px;
         transition: var(--transicionPanel);
 
         &:has(.movimientoPanel .inputOculto:checked) {
@@ -33,16 +27,55 @@ body {
         .movimientoPanel {
             position: absolute;
             top: 0;
-            right: calc(0% - (10px + var(--anchoBoton)));
+            right: calc(0% - (var(--margenPanel) + var(--anchoBoton)));
             width: var(--anchoBoton);
             height: 120px;
             font-weight: bold;
             writing-mode: vertical-lr;
             color: grey;
             letter-spacing: 4px;
-    
             border: 1px solid grey;
             transition: var(--transicionPanel);
+        }
+
+        .marcoEstatico {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+
+            .listaSecciones {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                height: var(--anchoBoton);
+                margin-bottom: 20px;
+
+                .secciones {
+                    position: relative;
+                    width: var(--anchoBoton);
+                    aspect-ratio: 1/1;
+                    border: 1px solid red;
+                }
+            }
+
+            .seccion {
+                position: absolute;
+                left: 160%;
+                width: 100%;
+                height: calc(100% - var(--anchoBoton) - 20px);
+                border: 1px solid red;
+                transition: 1s ease-in-out;
+            }
+        }
+
+        .marcoEstatico:has(.listaSecciones .botonInput:first-of-type input:checked) .seccion:first-of-type,
+        .marcoEstatico:has(.listaSecciones .botonInput:nth-of-type(2) input:checked) .seccion:nth-of-type(2),
+        .marcoEstatico:has(.listaSecciones .botonInput:nth-of-type(3) input:checked) .seccion:nth-of-type(3),
+        .marcoEstatico:has(.listaSecciones .botonInput:nth-of-type(4) input:checked) .seccion:nth-of-type(4),
+        .marcoEstatico:has(.listaSecciones .botonInput:nth-of-type(5) input:checked) .seccion:nth-of-type(5),
+        .marcoEstatico:has(.listaSecciones .botonInput:nth-of-type(6) input:checked) .seccion:nth-of-type(6) {
+           left: 0;
         }
     }
 }

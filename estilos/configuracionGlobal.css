@@ -1,8 +1,22 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "anta";
+    list-style: none;
+    user-select: none;
+    color: var(--grisTexto);
+}
+
 :root {
     --borderRadius10: 10px;
     --grisOscuro: rgb(28, 28, 28);
-    --margenPanel: 20px;
+    --margenPanel: 10px;
     --anchoBoton: 32px;
     --anchoPanel: 300px;
     --transicionPanel: 1s ease-in-out;
+    --transicionBotones: .2s;
+    --colorSeleccionado_1: rgb(73, 155, 148);
+    --colorSeleccionado_2: rgb(116, 145, 182);
+    --botonTransicion: .2s;
 }
