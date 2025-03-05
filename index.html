@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fondo dinámico</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
     <link rel="stylesheet" href="estilos/index.css">
     <link rel="stylesheet" href="estilos/configuracionGlobal.css">
     <link rel="stylesheet" href="estilos/clasesPredeterminadas.css">
 </head>
 <body class="centrado">
     <div class="panel blancoTranslucido">
+        <div class="tituloConfiguracion centrado borderRadius4">Configuracion</div>
+
         <span class="movimientoPanel centrado borderRadius4">Ajustes
             <input class="inputOculto" type="checkbox" checked></span>
             <div class="marcoEstatico">
@@ -30,13 +32,21 @@
                             <input type="radio" name="secciones" class="inputOculto"></li>
                     </ul>
                 </form>
-                <div class="seccion">1</div>
-                <div class="seccion">2</div>
-                <div class="seccion">3</div>
-                <div class="seccion">4</div>
-                <div class="seccion">5</div>
-                <div class="seccion">6</div>
+                <div class="seccion">
+                    <span class="titulo centrado borderRadius4">Seccion 1</span>
+                    <input-rango title="Propiedad 1" min="10" max="50" value="30"></input-rango>
+                    <input-rango title="Propiedad 2" min="10" max="50" value="30"></input-rango>
+                    <input-rango title="Propiedad 3" min="10" max="50" value="30"></input-rango>
+                    <input-rango title="Propiedad 4" min="10" max="50" value="30"></input-rango>
+                    <input-rango title="Propiedad 5" min="10" max="50" value="30"></input-rango>
+                    <input-rango title="Propiedad 6" min="10" max="50" value="30"></input-rango>
                 </div>
+                <div class="seccion"><span class="titulo centrado borderRadius4">Seccion 2</span></div>
+                <div class="seccion"><span class="titulo centrado borderRadius4">Seccion 3</span></div>
+                <div class="seccion"><span class="titulo centrado borderRadius4">Seccion 4</span></div>
+                <div class="seccion"><span class="titulo centrado borderRadius4">Seccion 5</span></div>
+                <div class="seccion"><span class="titulo centrado borderRadius4">Seccion 6</span></div>
     </div>
+    <script type="module" src="componentes/rangos.js"></script>
 </body>
 </html>

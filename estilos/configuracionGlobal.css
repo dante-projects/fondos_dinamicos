@@ -13,10 +13,10 @@
     --grisOscuro: rgb(28, 28, 28);
     --margenPanel: 10px;
     --anchoBoton: 32px;
-    --anchoPanel: 300px;
+    --anchoPanel: 280px;
     --transicionPanel: 1s ease-in-out;
     --transicionBotones: .2s;
     --colorSeleccionado_1: rgb(73, 155, 148);
-    --colorSeleccionado_2: rgb(116, 145, 182);
+    --colorSeleccionado_2: rgb(202, 103, 103);
     --botonTransicion: .2s;
 }

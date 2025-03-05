@@ -12,16 +12,24 @@ body {
         width: var(--anchoPanel);
         height: calc(100% - (2 * var(--margenPanel)));
         border-radius: var(--borderRadius10);
-        padding: 20px;
+        padding: 10px;
         transition: var(--transicionPanel);
 
         &:has(.movimientoPanel .inputOculto:checked) {
             left: calc(var(--margenPanel) - 2px);
 
             & .movimientoPanel {
-                top: calc(100% - 120px);
-                color: red;
+                top: calc(100% - 100px);
+                color: var(--colorSeleccionado_1);
             }
+        }
+
+        .tituloConfiguracion {
+            width: 100%;
+            height: var(--anchoBoton);
+            background-color: var(--grisOscuro);
+            color: white;
+            margin-bottom: 20px;
         }
 
         .movimientoPanel {
@@ -29,9 +37,10 @@ body {
             top: 0;
             right: calc(0% - (var(--margenPanel) + var(--anchoBoton)));
             width: var(--anchoBoton);
-            height: 120px;
+            height: 100px;
             font-weight: bold;
             writing-mode: vertical-lr;
+            font-size: 12px;
             color: grey;
             letter-spacing: 4px;
             border: 1px solid grey;
@@ -61,11 +70,18 @@ body {
 
             .seccion {
                 position: absolute;
-                left: 160%;
+                left: 200%;
                 width: 100%;
                 height: calc(100% - var(--anchoBoton) - 20px);
-                border: 1px solid red;
                 transition: 1s ease-in-out;
+
+                .titulo {
+                    width: 100%;
+                    height: var(--anchoBoton);
+                    background-color: var(--colorSeleccionado_2);
+                    color: white;
+                    margin-bottom: 30px;
+                }
             }
         }
 
@@ -76,6 +92,7 @@ body {
         .marcoEstatico:has(.listaSecciones .botonInput:nth-of-type(5) input:checked) .seccion:nth-of-type(5),
         .marcoEstatico:has(.listaSecciones .botonInput:nth-of-type(6) input:checked) .seccion:nth-of-type(6) {
            left: 0;
+           transition: left 1s ease-in-out;
         }
     }
 }
