@@ -1,3 +1,5 @@
+import { enviarEvento } from "./modulos/eventosPesonalizados.js"
+
 const seccionRangos = Array.from(document.querySelectorAll("#marcoEstatico .seccion"))[0]
 const rangos = Array.from(seccionRangos.querySelectorAll("input-rango"))
 
@@ -9,15 +11,15 @@ const leerRangos = () => {
 }
 
 const main = () => {
-    addEventListener("DOMContentLoaded", () => {
         leerRangos()
         rangos.forEach((item) => {
             item.shadowRoot.querySelector("input").addEventListener("input", () => {
                 leerRangos()
-                console.log(valores)
+                enviarEvento("valoresRangos", valores)
             })
         })
-    })
 }
 
-main()
+document.addEventListener("DOMContentLoaded", () => {
+    main()
+})
