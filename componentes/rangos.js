@@ -5,10 +5,10 @@ class inputRango extends HTMLElement {
 
         this.shadowRoot.innerHTML = `
             <div class="contenedorComponente">
-                <div class="cajaIzq">
+                <form class="cajaIzq">
                     <div id="titulo" class="titulo"></div>
                     <input id="rango" type="range">
-                </div>
+                </form>
                 <div class="cajaDer">
                     <span id="cajaValor" class="cajaValor"></span>
                 </div>
