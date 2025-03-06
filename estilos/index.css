@@ -72,7 +72,7 @@ body {
                 position: absolute;
                 left: 200%;
                 width: 100%;
-                height: calc(100% - var(--anchoBoton) - 20px);
+                height: calc(100% - var(--anchoBoton) - 80px);
                 transition: 1s ease-in-out;
 
                 .titulo {
