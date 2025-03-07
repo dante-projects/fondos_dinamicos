@@ -9,13 +9,13 @@ class campoTexto extends HTMLElement {
         this.shadowRoot.appendChild(link)
 
         this.shadowRoot.innerHTML += `
-            <div id="contenedorCampos" class="contenedorCampos">
+            <form id="contenedorCampos" class="contenedorCampos">
                 <div class="barraTitulo">
                     Texto en animación
                     <span id="eliminar" class="icono material-symbols-outlined">cancel_presentation</span>
                     <span id="nuevo" class="icono material-symbols-outlined">add_notes</span>
                 </div>
-            </div>
+            </form>
         `
 
         const estilo = document.createElement("style")
@@ -59,23 +59,49 @@ class campoTexto extends HTMLElement {
                     }
                 }
 
-                .campoTexto {
+                .cajaCampo {
+                    position: relative;
                     width: 100%;
-                    height: 100px;
-                    border: 1px solid grey;
-                    border-radius: 4px;
-                    outline: none;
-                    overflow-y: auto;
-                    word-wrap: break-word;
-                    cursor: pointer;
-                    padding: 6px;
-                    font-size: 14px;
-                    color: grey;
-                    margin-bottom: 16px;
+                    height: 0;
+                    transition: .3s ease-in-out;
+
+                    &:has(.inputOculto:checked) .campoTexto {
+                        border: 1px solid red;
+                        transition: .3s ease-in-out;
+                    }
+
+                    .inputOculto {
+                        appearance: none;
+                        position: absolute;
+                    }
+
+                    .campoTexto {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        border: 1px solid transparent;
+                        border-radius: 4px;
+                        outline: none;
+                        overflow-y: auto;
+                        word-wrap: break-word;
+                        cursor: pointer;
+                        font-size: 14px;
+                        color: grey;
+                        padding: 4px;
+                        transition: .3s ease-in-out;
+                    }
                 }
 
-                .seleccionado {
-                    border-color: red;
+                .abierta {
+                    width: 100%;
+                    height: 124px;
+                    transition: .3s ease-in-out;
+
+                    & .campoTexto {
+                        height: 110px;
+                        border-color: grey;
+                        transition: .3s ease-in-out;
+                    }
                 }
             }
 
@@ -84,59 +110,79 @@ class campoTexto extends HTMLElement {
     }
 
     connectedCallback() {
-        const maxCampos = Number(this.getAttribute("max")) - 1
+        const maxCampos = this.getAttribute("max")
         const contenedorCampos = this.shadowRoot.querySelector("#contenedorCampos")
-        const eliminar = this.shadowRoot.querySelector("#eliminar")
-        const nuevo = this.shadowRoot.querySelector("#nuevo")
+        const cerrar = this.shadowRoot.querySelector("#eliminar")
+        const abrir = this.shadowRoot.querySelector("#nuevo")
+        let cajas = []
+        let cajasAbiertas = []
         let campoSeleccionado 
 
-        const crear = () => {
-                const nuevoCampo = document.createElement("div")
-                nuevoCampo.classList.add("campoTexto")
-                nuevoCampo.setAttribute("contentEditable", true)
-                nuevoCampo.setAttribute("spellCheck", false)
-                contenedorCampos.appendChild(nuevoCampo)
-                campoSeleccionado = nuevoCampo
-                darEventos(nuevoCampo)
-                return nuevoCampo
+        function crearElemento(contenedor, elemento, clase) {
+            const nuevoElemento = document.createElement(elemento)
+            nuevoElemento.classList.add(clase)
+            contenedor.appendChild(nuevoElemento)
+            return nuevoElemento
         }
 
-        const darEventos = (item) => {
-            item.addEventListener("click", () => seleccionar(item))
+        function crearCaja(referencia = null) {
+            const nuevaCaja = crearElemento(contenedorCampos, "div", "cajaCampo")
+            referencia?.after(nuevaCaja) // para cambiar el contenedor si le paso la referencia
+ 
+            const input = crearElemento(nuevaCaja, "input", "inputOculto")
+            input.setAttribute("type", "radio")
+            input.setAttribute("name", "campo")
+            input.checked = true
+
+            const nuevoCampo = crearElemento(nuevaCaja, "div", "campoTexto")
+            nuevoCampo.innerText = "Texto de ejemplo"
+            nuevoCampo.setAttribute("contentEditable", true)
+            nuevoCampo.setAttribute("spellCheck", false)
+            cajas.push(nuevoCampo)
+            return nuevoCampo
         }
 
-        const seleccionar = (item) => {
-            const campos = Array.from(this.shadowRoot.querySelectorAll(".campoTexto"))
-            campos.forEach((campo) => {
-                campo.classList.remove("seleccionado")
-            })
-            item.classList.add("seleccionado")
-            item.focus()
+        function abrirCaja(item) {
+            item.parentElement.classList.add("abierta")
+            cajasAbiertas.push(item)
+        }
+
+        function seleccionarCampo(item) {
             campoSeleccionado = item
+            item.previousSibling.checked = true
+            return cajasAbiertas.findIndex(item => item === campoSeleccionado)
         }
 
-        const primerCampo = crear()
-        seleccionar(primerCampo)
+        function aplicarEventos(item) {
+            item.addEventListener("click", () => {
+                seleccionarCampo(item)
+            })
+        }
 
-        nuevo.addEventListener("click", () => {
-            const campos = Array.from(this.shadowRoot.querySelectorAll(".campoTexto"))
+        const primerCampo = crearCaja()
+        abrirCaja(primerCampo)
+        aplicarEventos(primerCampo)
+        seleccionarCampo(primerCampo)
 
-            if (campos.length <= maxCampos) {
-                const campo = crear()
-                seleccionar(campo)
-                darEventos(campo)
+        let contadorCampos = 1
+        abrir.addEventListener("click", () => {
+            if (cajasAbiertas.length < maxCampos) {
+                const nuevoCampo = crearCaja(campoSeleccionado.parentElement)
+                nuevoCampo.offsetHeight // forzar la recarga de la propiedad en el DOM para la animacion
+                abrirCaja(nuevoCampo)
+                aplicarEventos(nuevoCampo)
+                seleccionarCampo(nuevoCampo)
+                contadorCampos =+ 1
             }
         })
 
-        eliminar.addEventListener("click", () => {
-            let campos = Array.from(this.shadowRoot.querySelectorAll(".campoTexto"))
-
-            if (campos.length > 1) {
-                campoSeleccionado.remove()
-                const indice = campos.indexOf(campoSeleccionado)
-                campos.splice(indice, 1)
-                const indiceCorregido = (indice - 1) < 0 ? 0 : indice -1
-                seleccionar(campos[indiceCorregido])
+        cerrar.addEventListener("click", () => {
+            if (cajasAbiertas.length > 1) {
+                campoSeleccionado.parentElement.classList.remove("abierta")
+                const indiceSeleccionado = cajasAbiertas.findIndex(item => item === campoSeleccionado)
+                const nuevoIndice = indiceSeleccionado - 1 < 0 ? 0 : indiceSeleccionado - 1
+                cajasAbiertas.splice(indiceSeleccionado, 1)
+                seleccionarCampo(cajasAbiertas[nuevoIndice])
             }
         })
     }
