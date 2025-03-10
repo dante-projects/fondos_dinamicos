@@ -12,7 +12,7 @@ class campoTexto extends HTMLElement {
             <form id="contenedorCampos" class="contenedorCampos">
                 <div class="barraTitulo">
                     Texto en animación
-                    <span id="eliminar" class="icono material-symbols-outlined">cancel_presentation</span>
+                    <span id="eliminar" class="icono material-symbols-outlined">delete</span>
                     <span id="nuevo" class="icono material-symbols-outlined">add_notes</span>
                 </div>
             </form>
@@ -24,9 +24,18 @@ class campoTexto extends HTMLElement {
                 box-sizing: border-box;
             }
 
+            :host {
+                --margenCampo: 10px;
+                --alturaCaja: 110px;
+                --transicion: .3s ease-in-out;
+            }
+
             .contenedorCampos {
                 width: 100%;
                 height: auto;
+                margin-bottom: 10px;
+                transition: var(--transicion);
+                border: 1px solid transparent;
 
                 .barraTitulo {
                     position: relative;
@@ -39,7 +48,7 @@ class campoTexto extends HTMLElement {
                     color: grey;
                     border: 1px solid grey;
                     border-radius: 4px;
-                    margin-bottom: 16px;
+                    margin-bottom: 20px;
 
                     .icono {
                         position: absolute;
@@ -59,27 +68,17 @@ class campoTexto extends HTMLElement {
                     }
                 }
 
-                .cajaCampo {
-                    position: relative;
+                .caja {
                     width: 100%;
                     height: 0;
-                    transition: .3s ease-in-out;
+                    overflow: hidden;
+                    margin-bottom: 0;
+                    transition: var(--transicion);
 
-                    &:has(.inputOculto:checked) .campoTexto {
-                        border: 1px solid red;
-                        transition: .3s ease-in-out;
-                    }
-
-                    .inputOculto {
-                        appearance: none;
-                        position: absolute;
-                    }
-
-                    .campoTexto {
-                        position: absolute;
+                    .campo {
                         width: 100%;
                         height: 100%;
-                        border: 1px solid transparent;
+                        border: 1px solid grey;
                         border-radius: 4px;
                         outline: none;
                         overflow-y: auto;
@@ -87,20 +86,26 @@ class campoTexto extends HTMLElement {
                         cursor: pointer;
                         font-size: 14px;
                         color: grey;
-                        padding: 4px;
-                        transition: .3s ease-in-out;
+                        padding: 8px;
+                        box-shadow: inset 1px 1px 4px transparent;
                     }
                 }
 
                 .abierta {
                     width: 100%;
-                    height: 124px;
-                    transition: .3s ease-in-out;
+                    height: var(--alturaCaja);
+                    transition: var(--transicion);
 
-                    & .campoTexto {
-                        height: 110px;
-                        border-color: grey;
-                        transition: .3s ease-in-out;
+                    .campo {
+                        width: 100%;
+                        height: calc(var(--alturaCaja) - var(--margenCampo));
+                        border: 1px solid grey;
+                    }
+
+                    .seleccionado {
+                        box-shadow: inset 1px 1px 4px rgb(28, 28, 28);
+                        color: grey;
+                        transition: var(--transicion);
                     }
                 }
             }
@@ -114,77 +119,128 @@ class campoTexto extends HTMLElement {
         const contenedorCampos = this.shadowRoot.querySelector("#contenedorCampos")
         const cerrar = this.shadowRoot.querySelector("#eliminar")
         const abrir = this.shadowRoot.querySelector("#nuevo")
-        let cajas = []
         let cajasAbiertas = []
         let campoSeleccionado 
 
-        function crearElemento(contenedor, elemento, clase) {
-            const nuevoElemento = document.createElement(elemento)
-            nuevoElemento.classList.add(clase)
-            contenedor.appendChild(nuevoElemento)
-            return nuevoElemento
-        }
+        let contadorCajas = 0
+        function crearCajas() {
+            const nuevaCaja = document.createElement("div")
+            nuevaCaja.classList.add("caja")
+            nuevaCaja.id = "caja_" + contadorCajas
+            const contenedor = campoSeleccionado 
+                ? campoSeleccionado.parentElement.insertAdjacentElement("afterend", nuevaCaja) 
+                : contenedorCampos.appendChild(nuevaCaja)
 
-        function crearCaja(referencia = null) {
-            const nuevaCaja = crearElemento(contenedorCampos, "div", "cajaCampo")
-            referencia?.after(nuevaCaja) // para cambiar el contenedor si le paso la referencia
- 
-            const input = crearElemento(nuevaCaja, "input", "inputOculto")
-            input.setAttribute("type", "radio")
-            input.setAttribute("name", "campo")
-            input.checked = true
-
-            const nuevoCampo = crearElemento(nuevaCaja, "div", "campoTexto")
-            nuevoCampo.innerText = "Texto de ejemplo"
+            const nuevoCampo = document.createElement("div")
+            nuevoCampo.classList.add("campo")
+            nuevoCampo.id = "campo_" + contadorCajas
             nuevoCampo.setAttribute("contentEditable", true)
             nuevoCampo.setAttribute("spellCheck", false)
-            cajas.push(nuevoCampo)
+            nuevoCampo.innerText = contadorCajas
+            nuevaCaja.appendChild(nuevoCampo)
+            contadorCajas += 1
             return nuevoCampo
         }
 
         function abrirCaja(item) {
             item.parentElement.classList.add("abierta")
-            cajasAbiertas.push(item)
+            cajasAbiertas = Array.from(contenedorCampos.querySelectorAll(".abierta"))
         }
 
         function seleccionarCampo(item) {
+            cajasAbiertas = Array.from(contenedorCampos.querySelectorAll(".abierta"))
+            cajasAbiertas.forEach((caja) => {
+                caja.querySelector(".campo").classList.remove("seleccionado")
+            })
+            item.classList.add("seleccionado")
             campoSeleccionado = item
-            item.previousSibling.checked = true
-            return cajasAbiertas.findIndex(item => item === campoSeleccionado)
+            return item
         }
 
-        function aplicarEventos(item) {
+        function aplicarReactividad(item) {
             item.addEventListener("click", () => {
                 seleccionarCampo(item)
             })
         }
 
-        const primerCampo = crearCaja()
-        abrirCaja(primerCampo)
-        aplicarEventos(primerCampo)
+        function recargaDOM(item) {
+            item.offsetHeight // puto dom - forzar la recarga. para las transiciones
+        }
+
+        const primerCampo = crearCajas()
+        recargaDOM(primerCampo)
         seleccionarCampo(primerCampo)
+        aplicarReactividad(primerCampo)
+        abrirCaja(primerCampo)
 
-        let contadorCampos = 1
+        let estadoAbrir = "listo"
         abrir.addEventListener("click", () => {
-            if (cajasAbiertas.length < maxCampos) {
-                const nuevoCampo = crearCaja(campoSeleccionado.parentElement)
-                nuevoCampo.offsetHeight // forzar la recarga de la propiedad en el DOM para la animacion
-                abrirCaja(nuevoCampo)
-                aplicarEventos(nuevoCampo)
-                seleccionarCampo(nuevoCampo)
-                contadorCampos =+ 1
+            iconos()
+            if (estadoAbrir === "listo") {
+                estadoAbrir = "ocupado"
+                if (cajasAbiertas.length < maxCampos) {
+                    const nuevoCampo = crearCajas()
+                    recargaDOM(nuevoCampo) 
+                    seleccionarCampo(nuevoCampo)
+                    aplicarReactividad(nuevoCampo)
+                    abrirCaja(nuevoCampo)
+                    cajasAbiertas = Array.from(contenedorCampos.querySelectorAll(".abierta"))
+                    iconos()   
+                    estadoAbrir = "listo"              
+                }      
             }
         })
 
-        cerrar.addEventListener("click", () => {
-            if (cajasAbiertas.length > 1) {
-                campoSeleccionado.parentElement.classList.remove("abierta")
-                const indiceSeleccionado = cajasAbiertas.findIndex(item => item === campoSeleccionado)
-                const nuevoIndice = indiceSeleccionado - 1 < 0 ? 0 : indiceSeleccionado - 1
-                cajasAbiertas.splice(indiceSeleccionado, 1)
-                seleccionarCampo(cajasAbiertas[nuevoIndice])
+        let estadoCerrar = 0
+        cerrar.addEventListener("click", async () => {
+            iconos()
+            if (estadoCerrar === 0)  {
+                estadoCerrar = 1
+                if (cajasAbiertas.length > 1) {
+
+                    const indexSeleccionado = cajasAbiertas.findIndex(item => item.querySelector(".campo") === campoSeleccionado)                    
+                    if (indexSeleccionado === 0) {
+                        seleccionarCampo(cajasAbiertas[1].querySelector(".campo"))
+                    } else if (indexSeleccionado === 1) {
+                        seleccionarCampo(cajasAbiertas[0].querySelector(".campo"))
+                    } else {
+                        seleccionarCampo(cajasAbiertas[indexSeleccionado - 1].querySelector(".campo"))
+                    }
+
+                    cajasAbiertas[indexSeleccionado].classList.remove("abierta")
+                    const tiempoAnimacion = parseFloat(getComputedStyle(this).getPropertyValue("--transicion")) * 1000
+                    setTimeout(() => {
+                            cajasAbiertas[indexSeleccionado].remove()
+                            cajasAbiertas = Array.from(contenedorCampos.querySelectorAll(".abierta"))
+                            iconos()        
+                            estadoCerrar = 0 
+                    }, tiempoAnimacion)
+                }
             }
         })
+
+        function iconos() {
+            if (cajasAbiertas.length < maxCampos) {
+                abrir.style.color = "rgb(100, 100, 100)"
+                abrir.style.cursor = "pointer"
+                abrir.style.pointerEvents = "auto"
+            } else {
+                abrir.style.color = "red"
+                abrir.style.cursor = "auto"
+                abrir.style.pointerEvents = "none"
+            }
+            if (cajasAbiertas.length > 1) {
+                cerrar.style.color = "rgb(100, 100, 100)"
+                cerrar.style.cursor = "pointer"
+                cerrar.style.pointerEvents = "auto"
+            } else {
+                cerrar.style.color = "red"
+                cerrar.style.cursor = "auto"
+                cerrar.style.pointerEvents = "none"
+            }    
+        }
+
+        iconos()
     }
 }
 customElements.define("campo-texto", campoTexto)
