@@ -76,10 +76,11 @@ body {
                 transition: 1s ease-in-out;
 
                 .titulo {
-                    width: 100%;
-                    height: var(--anchoBoton);
-                    background-color: var(--colorSeleccionado_2);
-                    color: white;
+                    width: auto;
+                    height: auto;
+                    padding: 4px;
+                    border: 1px solid var(--grisOscuro);
+                    color: var(--grisOscuro);
                     margin-bottom: 30px;
                 }
             }

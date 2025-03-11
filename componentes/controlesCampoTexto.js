@@ -42,6 +42,7 @@ class controlesCampoTexto extends HTMLElement {
             .contenedor {
                 width: 100%;
                 heigth: auto;
+                margin-top: 10px;
 
                 .etiquetas {
                     display: flex;

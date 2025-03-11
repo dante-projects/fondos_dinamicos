@@ -33,7 +33,6 @@ class campoTexto extends HTMLElement {
             .contenedorCampos {
                 width: 100%;
                 height: auto;
-                margin-bottom: 10px;
                 transition: var(--transicion);
                 border: 1px solid transparent;
 
@@ -48,7 +47,7 @@ class campoTexto extends HTMLElement {
                     color: grey;
                     border: 1px solid grey;
                     border-radius: 4px;
-                    margin-bottom: 20px;
+                    margin-bottom: var(--margenCampo);
 
                     .icono {
                         position: absolute;
@@ -72,7 +71,6 @@ class campoTexto extends HTMLElement {
                     width: 100%;
                     height: 0;
                     overflow: hidden;
-                    margin-bottom: 0;
                     transition: var(--transicion);
 
                     .campo {
@@ -136,7 +134,7 @@ class campoTexto extends HTMLElement {
             nuevoCampo.id = "campo_" + contadorCajas
             nuevoCampo.setAttribute("contentEditable", true)
             nuevoCampo.setAttribute("spellCheck", false)
-            nuevoCampo.innerText = contadorCajas
+            nuevoCampo.innerText = "Texto de ejemplo"
             nuevaCaja.appendChild(nuevoCampo)
             contadorCajas += 1
             return nuevoCampo
@@ -167,11 +165,26 @@ class campoTexto extends HTMLElement {
             item.offsetHeight // puto dom - forzar la recarga. para las transiciones
         }
 
+        function escritura(item) {
+            const texto = item.innerText
+            item.addEventListener("focus", () => {
+                if(item.innerText === texto) {
+                    item.innerText = ""
+                }
+            })
+            item.addEventListener("blur", () => {
+                if (item.innerText.trim() === "") {
+                    item.innerText = texto
+                }
+            })
+        }
+
         const primerCampo = crearCajas()
         recargaDOM(primerCampo)
         seleccionarCampo(primerCampo)
         aplicarReactividad(primerCampo)
         abrirCaja(primerCampo)
+        escritura(primerCampo)
 
         let estadoAbrir = "listo"
         abrir.addEventListener("click", () => {
@@ -184,6 +197,8 @@ class campoTexto extends HTMLElement {
                     seleccionarCampo(nuevoCampo)
                     aplicarReactividad(nuevoCampo)
                     abrirCaja(nuevoCampo)
+                    escritura(nuevoCampo)
+
                     cajasAbiertas = Array.from(contenedorCampos.querySelectorAll(".abierta"))
                     iconos()   
                     estadoAbrir = "listo"              

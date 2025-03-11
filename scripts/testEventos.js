@@ -1,7 +1,12 @@
 import { recibirEvento } from "./modulos/eventosPesonalizados.js"
 
-const valoresXconsola = (datos) => {
-    console.log(datos)
+const valoresComponentesRangos = (datos) => {
+    console.log("componentes Rangos:", datos)
 }
 
-recibirEvento("valoresRangos", valoresXconsola)
+const valoresComponenteCamposTexto = (datos) => {
+    console.log("componente campos:", datos)
+}
+
+recibirEvento("valoresRangos", valoresComponentesRangos)
+recibirEvento("valoresCamposTexto", valoresComponenteCamposTexto)
