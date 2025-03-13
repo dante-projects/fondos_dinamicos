@@ -10,7 +10,7 @@ class opcionesCampoTexto extends HTMLElement {
 
         this.shadowRoot.innerHTML += `
             <div class="contenedor">
-                <form id="etiquetas" class="etiquetas">
+                <form id="etiquetas" class="etiquetas borderRadiusGrey">
                     <span class="botonIcono material-symbols-outlined centrado" title="h1">
                         <input class="inputOculto" type="radio" name="etiqueta" checked>format_h1
                     </span>
@@ -32,7 +32,7 @@ class opcionesCampoTexto extends HTMLElement {
                 </form>
 
                 <div class="cajaFormato">
-                    <div id="visor" class="visor centrado"></div>
+                    <div id="visor" class="visor centrado borderRadiusGrey"></div>
                     <div class="textoSize borderRadiusGrey">
                         <span id="textoSizeMas" class="boton material-symbols-outlined centrado">stat_1</span>
                         <span id="textoSizeValor" class="valor centrado"></span>
@@ -40,7 +40,7 @@ class opcionesCampoTexto extends HTMLElement {
                     </div>
                 </div>
             
-                <form id="formatoLetra" class="formatoLetra">
+                <form id="formatoLetra" class="formatoLetra borderRadiusGrey">
                     <span class="botonIcono material-symbols-outlined centrado" title="left">
                         <input class="inputOculto" type="radio" name="alineacion">align_justify_flex_start
                     </span>
@@ -100,6 +100,11 @@ class opcionesCampoTexto extends HTMLElement {
                 align-items: center
             }
 
+            .borderRadiusGrey {
+                border: 1px solid grey;
+                border-radius: 4px;
+            }
+
             .contenedor {
                 width: 100%;
                 heigth: auto;
@@ -111,8 +116,6 @@ class opcionesCampoTexto extends HTMLElement {
                     width: 100%;
                     height: auto;
                     margin-bottom: var(--margenVertical);
-                    border: 1px solid grey;
-                    border-radius: 4px;
                 }
 
                 .cajaFormato {
@@ -125,8 +128,6 @@ class opcionesCampoTexto extends HTMLElement {
                     .visor {
                         height: 100%;
                         width: calc(100% - 54px);
-                        border: 1px solid grey;
-                        border-radius: 4px;
                         box-shadow: inset 2px 2px 8px grey;
                         color: grey;
                         overflow: hidden;
@@ -142,8 +143,6 @@ class opcionesCampoTexto extends HTMLElement {
                         justify-content: space-between;
                         align-items: center;
                         width: 40px;
-                        border: 1px solid grey;
-                        border-radius: 4px;
                         color: grey;
                         
                         .boton {
@@ -168,8 +167,6 @@ class opcionesCampoTexto extends HTMLElement {
                     width: 100%;
                     heigth: var(--altoElementos);
                     margin-bottom: var(--margenVertical);
-                    border: 1px solid grey;
-                    border-radius: 4px;
                     margin-bottom: var(--margenVertical);
 
                     .botonIcono {
@@ -296,7 +293,6 @@ class opcionesCampoTexto extends HTMLElement {
             valor.innerText = configuracion[0]
             dibujar()
             configurar()
-            console.log(configuracion)
         }
 
         main()
