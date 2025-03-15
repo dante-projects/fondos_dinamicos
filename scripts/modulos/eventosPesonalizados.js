@@ -2,11 +2,11 @@ export const enviarEvento = (nombreEvento, datosPublicos) => {
     const evento = new CustomEvent(nombreEvento, {
         detail: datosPublicos
     })
-    document.dispatchEvent(evento)
+    window.dispatchEvent(evento)
 }
 
 export const recibirEvento = (nombreEvento, callback) => {
-    document.addEventListener(nombreEvento, (e) => {
+    window.addEventListener(nombreEvento, (e) => {
         callback(e.detail)
     })
 }

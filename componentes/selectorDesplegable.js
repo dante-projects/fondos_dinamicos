@@ -13,7 +13,7 @@ class selectorDesplegable extends HTMLElement {
                 <div class="titulo">Seleccionar fuente
                     <span id="icono" class="icono material-symbols-outlined centrado">arrow_drop_down</span>
                 </div>
-                <div class="contenedorFuentes"></div>
+                <form id="listaFuentes" class="listaFuentes"></form>
             </div>
         `
 
@@ -62,18 +62,43 @@ class selectorDesplegable extends HTMLElement {
                     }
                 }
 
-                .contenedorFuentes {
+                .listaFuentes {
                     width: 100%;
                     height: 0;
                     transition: .5s ease-in-out;
+                    overflow-Y: auto;
+
+                    .fuente {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                        height: 32px;
+                        text-indent: 10px;
+
+                        &:has(input:checked) {
+                            background-color: grey;
+                            color: white;
+                        }
+
+                        input {
+                            appearance: none;
+                            position: absolute;
+                            left: -5px;
+                            width: 100%;
+                            height: 100%;
+                            cursor: pointer;
+                        }
+                    }
                 }
             }
         `
         this.shadowRoot.appendChild(estilo)
     }
+
     connectedCallback() {
         const icono = this.shadowRoot.querySelector("#icono")
-        const contenedorFuentes = this.shadowRoot.querySelector(".contenedorFuentes")
+        const contenedorFuentes = this.shadowRoot.querySelector(".listaFuentes")
 
         function abrirCerrar() {
             let estado = 0
@@ -91,6 +116,16 @@ class selectorDesplegable extends HTMLElement {
         icono.addEventListener("click", () => {
             abrirCerrar()
         })
+
+        // eventos personalizado despues de la carga completa
+
+        window.addEventListener("DOMContentLoaded", () => {
+            window.dispatchEvent(new CustomEvent("selectorFuentes"))
+            window.addEventListener("fuentesGoogle", () => {
+                console.log("COPMONENTE: respuesta recibida")
+            })
+        })
+
     }
 }
 customElements.define("selector-desplegable", selectorDesplegable)

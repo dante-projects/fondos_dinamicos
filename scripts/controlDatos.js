@@ -1,5 +1,4 @@
 import { enviarEvento } from "./modulos/eventosPesonalizados.js"
-import { obserbar } from "./modulos/observarCambiosDom.js"
 
 const secciones = Array.from(document.querySelectorAll("#marcoEstatico .seccion"))
 const seccionRangos = secciones[0]
@@ -34,7 +33,6 @@ const leerTextos = () => {
 const main = () => {
         leerRangos()
         leerTextos()
-        obserbar(componenteTexto.shadowRoot.querySelector("#contenedorCampos"), leerTextos)
 }
 
 document.addEventListener("DOMContentLoaded", () => {
