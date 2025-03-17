@@ -254,7 +254,6 @@ class campoTexto extends HTMLElement {
                 cerrar.style.pointerEvents = "none"
             }    
         }
-
         iconos()
     }
 }

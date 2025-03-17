@@ -38,6 +38,7 @@ class selectorDesplegable extends HTMLElement {
             .contenedor {
                 width: 100%;
                 height: auto;
+                margin-bottom: 14px;
 
                 .titulo {
                     position: relative;

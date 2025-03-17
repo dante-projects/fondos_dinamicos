@@ -1,13 +1,15 @@
-class inputRango extends HTMLElement {
+import "./rangoSimple.js"
+
+class rangoValor extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({mode: "open"})
 
         this.shadowRoot.innerHTML = `
-            <div class="contenedorComponente">
+            <div class="contenedor">
                 <form class="cajaIzq">
                     <div id="titulo" class="titulo"></div>
-                    <input id="rango" type="range">
+                    <rango-simple id="rango"></rango-simple>
                 </form>
                 <div class="cajaDer">
                     <span id="cajaValor" class="cajaValor"></span>
@@ -21,7 +23,7 @@ class inputRango extends HTMLElement {
                 box-sizing: border-box;
             }
             
-            .contenedorComponente {
+            .contenedor {
                 position: relative;
                 display: flex;
                 justify-content: space-between;
@@ -38,47 +40,6 @@ class inputRango extends HTMLElement {
 
                     .titulo {
                         color: grey;
-                    }
-
-                    input[type="range"] {
-                        width: 100%;
-                        height: 50%;
-                        background: transparent;
-                        cursor: pointer;
-
-                        &:hover::-moz-range-thumb {
-                            border-color: rgb(28, 28, 28);
-                            transition: .2s;
-                        }
-
-                        &::-moz-range-track {
-                            height: 2px;
-                            border: 1px solid grey;
-                            border-radius: 4px;
-                            background-color: transparent;
-                        }
-
-                        &::-moz-range-thumb {
-                            box-sizing: border-box;
-                            width: 24px;
-                            height: 12px;
-                            border: 3px solid grey;
-                            border-radius: 3px;
-                            background-color: white;
-                            transition: .6s;
-                        }
-                    }
-
-                    &:has(input:active) + .cajaDer {
-                        background-color: rgb(28, 28, 28);
-                        border-color: rgb(28, 28, 28)
-                        transition: .2s;
-
-                        & .cajaValor {
-                            color: white;
-                            transform: scale(130%);
-                            transition: .2s;
-                        }
                     }
                 }
 
@@ -109,9 +70,15 @@ class inputRango extends HTMLElement {
     connectedCallback() {
         const titulo = this.shadowRoot.getElementById("titulo")
         titulo.innerText = this.getAttribute("title")
+        const min = this.getAttribute("min")
+        const max = this.getAttribute("max")
+        const value = this.getAttribute("value")
 
+        const rango = this.shadowRoot.getElementById("rango").shadowRoot.querySelector("#rango")
+        rango.setAttribute("min", min)
+        rango.setAttribute("max", max)
+        rango.setAttribute("value", value)
 
-        const rango = this.shadowRoot.getElementById("rango")
         const cajaValor = this.shadowRoot.getElementById("cajaValor")
         cajaValor.innerText = rango.value
         
@@ -120,4 +87,4 @@ class inputRango extends HTMLElement {
         })
     }
 }
-customElements.define("input-rango", inputRango)
+customElements.define("input-valor", rangoValor)
