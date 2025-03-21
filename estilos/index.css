@@ -60,12 +60,12 @@ body {
                 height: var(--anchoBoton);
                 margin-bottom: 20px;
 
-                .secciones {
+                /* .secciones {
                     position: relative;
                     width: var(--anchoBoton);
                     aspect-ratio: 1/1;
                     border: 1px solid red;
-                }
+                } */
             }
 
             .seccion {
@@ -74,6 +74,7 @@ body {
                 width: 100%;
                 height: calc(100% - var(--anchoBoton) - 80px);
                 transition: 1s ease-in-out;
+                overflow-y: auto;
 
                 .titulo {
                     width: auto;
