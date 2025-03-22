@@ -9,13 +9,12 @@ class campoTexto extends HTMLElement {
         this.shadowRoot.appendChild(link)
 
         this.shadowRoot.innerHTML += `
-            <form id="contenedorCampos" class="contenedorCampos">
-                <div class="barraTitulo">
-                    Texto en animación
+            <div id="contenedorCampos" class="contenedorCampos">
+                <div class="barraTitulo">Campos de texto
                     <span id="eliminar" class="icono material-symbols-outlined">delete</span>
                     <span id="nuevo" class="icono material-symbols-outlined">add_notes</span>
                 </div>
-            </form>
+            </div>
         `
 
         const estilo = document.createElement("style")
@@ -188,7 +187,7 @@ class campoTexto extends HTMLElement {
 
         let estadoAbrir = "listo"
         abrir.addEventListener("click", () => {
-            iconos()
+            actualizarIconos()
             if (estadoAbrir === "listo") {
                 estadoAbrir = "ocupado"
                 if (cajasAbiertas.length < maxCampos) {
@@ -200,7 +199,7 @@ class campoTexto extends HTMLElement {
                     escritura(nuevoCampo)
 
                     cajasAbiertas = Array.from(contenedorCampos.querySelectorAll(".abierta"))
-                    iconos()   
+                    actualizarIconos()   
                     estadoAbrir = "listo"              
                 }      
             }
@@ -208,7 +207,7 @@ class campoTexto extends HTMLElement {
 
         let estadoCerrar = 0
         cerrar.addEventListener("click", async () => {
-            iconos()
+            actualizarIconos()
             if (estadoCerrar === 0)  {
                 estadoCerrar = 1
                 if (cajasAbiertas.length > 1) {
@@ -227,14 +226,14 @@ class campoTexto extends HTMLElement {
                     setTimeout(() => {
                             cajasAbiertas[indexSeleccionado].remove()
                             cajasAbiertas = Array.from(contenedorCampos.querySelectorAll(".abierta"))
-                            iconos()        
+                            actualizarIconos()        
                             estadoCerrar = 0 
                     }, tiempoAnimacion)
                 }
             }
         })
 
-        function iconos() {
+        function actualizarIconos() {
             if (cajasAbiertas.length < maxCampos) {
                 abrir.style.color = "rgb(100, 100, 100)"
                 abrir.style.cursor = "pointer"
@@ -254,7 +253,8 @@ class campoTexto extends HTMLElement {
                 cerrar.style.pointerEvents = "none"
             }    
         }
-        iconos()
+        
+        actualizarIconos()
     }
 }
 customElements.define("campo-texto", campoTexto)

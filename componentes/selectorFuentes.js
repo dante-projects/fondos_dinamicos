@@ -1,7 +1,16 @@
+import "./comunes/funciones/eventosPesonalizados.js"
+import "./comunes/subComponentes/titulo.js"
+import { capturarEvento } from "./comunes/funciones/eventosPesonalizados.js"
+import { abrirCerrar } from "./comunes/funciones/abrirCerrar.js"
+
 class selectorDesplegable extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({mode: "open"})
+
+        capturarEvento("textoFuentes", (e) => {
+            abrirCerrar(this.shadowRoot.querySelector("#contenedorDesplegable"), e.detail)
+        })
 
         const link = document.createElement("link")
         link.rel = "stylesheet"
@@ -10,10 +19,8 @@ class selectorDesplegable extends HTMLElement {
 
         this.shadowRoot.innerHTML += `
             <div class="contenedor borderRadiusGrey">
-                <div id="titulo" class="titulo">Seleccionar fuente
-                    <span class="icono material-symbols-outlined centrado">arrow_drop_down</span>
-                </div>
-                <form id="listaFuentes" class="listaFuentes"></form>
+                <titulo-desplegable id="textoFuentes">Seleccionar fuente</titulo-desplegable>
+                <form id="contenedorDesplegable" class="contenedorDesplegable"></form>
             </div>
         `
 
@@ -22,6 +29,12 @@ class selectorDesplegable extends HTMLElement {
             * {
                 box-sizing: border-box;
                 color: grey;
+            }
+
+            .test {
+                width: 100%;
+                height: 30px;
+                border: 1px solid red;
             }
 
             .borderRadiusGrey {
@@ -40,48 +53,11 @@ class selectorDesplegable extends HTMLElement {
                 height: auto;
                 margin-bottom: 14px;
 
-                .titulo {
-                    position: relative;
-                    display: flex;
-                    align-items: center;
-                    flex: 1;
-                    height: 32px;
-                    color: grey;
-                    text-indent: 10px;
-                    cursor: pointer;
-                    transition: .5s .5s;
-
-                    &:hover .icono {
-                        color: red;
-                    }
-
-                    .icono {
-                        position: absolute;
-                        right: 0;
-                        height: 32px;
-                        aspect-ratio: 1/1;
-                        font-size: 30px;
-
-                    }
-                }
-
-                .abierto {
-                    transition: .2s;
-
-                    & .icono {
-                        color: red;
-                    }
-
-                    & + .listaFuentes {
-                        height: 200px;
-                    } 
-                }
-
-                .listaFuentes {
+                .contenedorDesplegable {
                     width: 100%;
                     height: 0;
+                    overflow: hidden;
                     transition: .5s ease-in-out;
-                    overflow-Y: auto;
 
                     .fuente {
                         position: relative;
@@ -118,18 +94,6 @@ class selectorDesplegable extends HTMLElement {
     }
 
     connectedCallback() {
-        const titulo = this.shadowRoot.querySelector("#titulo")
-        const contenedorFuentes = this.shadowRoot.querySelector(".listaFuentes")
-
-        function abrirCerrar() {
-            titulo.classList.toggle("abierto")
-            const estado = titulo.classList.contains("abierto") ? 1 : 0
-            return estado
-        }
-
-        titulo.addEventListener("click", () => {
-            abrirCerrar()
-        })
 
         function obtenerFuentes(item) {
             const fuentesJson = JSON.parse(localStorage.getItem(item))
@@ -137,6 +101,7 @@ class selectorDesplegable extends HTMLElement {
             return fuentes
         }
 
+        const contenedorFuentes = this.shadowRoot.querySelector("#contenedorDesplegable")
         function crearOpcion(array) {
             array.forEach((item, num) => {
                 const nuevaOpcion = document.createElement("span")
@@ -152,6 +117,7 @@ class selectorDesplegable extends HTMLElement {
                 contenedorFuentes.appendChild(nuevaOpcion)
             })
         }
+        crearOpcion(obtenerFuentes("fuentesGoogle"))
 
         // eventos personalizado despues de la carga completa
         window.addEventListener("DOMContentLoaded", () => {
@@ -159,7 +125,7 @@ class selectorDesplegable extends HTMLElement {
             window.dispatchEvent(new CustomEvent("selectorFuentes"))
 
             window.addEventListener("fuentesGoogle", () => {
-                console.log("COMPONENTE: respuesta recibida")
+                console.log("selectorFuentes: datos recibidos")
                 crearOpcion(obtenerFuentes("fuentesGoogle"))            
             })
         })

@@ -8,7 +8,7 @@ const urlFuentes = "https://dante-projects.github.io/recursos/fuentesGoogle.json
 let fuentesGoogle = false
 recibirEvento("selectorFuentes", () => {
     fuentesGoogle = true
-    console.log("RECURSOS: detectado componente listo")
+    console.log("RECURSOS: selectorFuentes listo")
 })
 
 function respuesta(item) {
@@ -43,14 +43,14 @@ async function main() {
         if (await comprobarVersiones(controlVersiones, urlFuentes, "fuentesGoogle")) {
             const intervalo = setInterval(() => {
                 if (!fuentesGoogle) {
-                    console.log("RECURSOS: esperando al componente")
+                    console.log("RECURSOS: selectorFuentes esperando")
                 } else {
                     respuesta("fuentesGoogle")
-                    console.log("RECURSOS: componente avisado")
+                    console.log("RECURSOS: selectorFuentes datos disponibles y avisado")
                     clearInterval(intervalo)
                 }
             }, 500)
         }
 }
 
-main()
+// main()

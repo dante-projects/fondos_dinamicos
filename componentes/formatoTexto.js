@@ -1,66 +1,79 @@
+import { capturarEvento } from "./comunes/funciones/eventosPesonalizados.js"
+import { abrirCerrar } from "./comunes/funciones/abrirCerrar.js"
+import "./comunes/subComponentes/titulo.js" 
+
 class opcionesCampoTexto extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({mode: "open"})
 
+        capturarEvento("textoFormato", (e) => {
+            abrirCerrar(this.shadowRoot.querySelector("#contenedorDesplegable"), e.detail)
+        })
+        
         const link = document.createElement("link")
         link.rel = "stylesheet"
         link.href = "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
         this.shadowRoot.appendChild(link)
 
         this.shadowRoot.innerHTML += `
-            <div class="contenedor">
-                <form id="etiquetas" class="etiquetas borderRadiusGrey">
-                    <span class="botonIcono material-symbols-outlined centrado" title="h1">
-                        <input class="inputOculto" type="radio" name="etiqueta" checked>format_h1
-                    </span>
-                    <span class="botonIcono material-symbols-outlined centrado" title="h2">
-                        <input class="inputOculto" type="radio" name="etiqueta">format_h2
-                    </span>
-                    <span class="botonIcono material-symbols-outlined centrado" title="h3">
-                        <input class="inputOculto" type="radio" name="etiqueta">format_h3
-                    </span>
-                    <span class="botonIcono material-symbols-outlined centrado" title="h4">
-                        <input class="inputOculto" type="radio" name="etiqueta">format_h4
-                    </span>
-                    <span class="botonIcono material-symbols-outlined centrado" title="p">
-                        <input class="inputOculto" type="radio" name="etiqueta">view_headline
-                    </span>
-                    <span class="botonIcono material-symbols-outlined centrado" title="pre">
-                        <input class="inputOculto" type="radio" name="etiqueta">article_person
-                    </span>
-                </form>
+            <div class="contenedor borderRadiusGrey">
+                <titulo-desplegable id="textoFormato">Formato</titulo-desplegable>
+                    <div id="contenedorDesplegable" class="contenedorDesplegable">
+                        <div class="contenedorPadding">
+                            <form id="etiquetas" class="etiquetas borderRadiusGrey">
+                                <span class="botonIcono material-symbols-outlined centrado" title="h1">
+                                    <input class="inputOculto" type="radio" name="etiqueta" checked>format_h1
+                                </span>
+                                <span class="botonIcono material-symbols-outlined centrado" title="h2">
+                                    <input class="inputOculto" type="radio" name="etiqueta">format_h2
+                                </span>
+                                <span class="botonIcono material-symbols-outlined centrado" title="h3">
+                                    <input class="inputOculto" type="radio" name="etiqueta">format_h3
+                                </span>
+                                <span class="botonIcono material-symbols-outlined centrado" title="h4">
+                                    <input class="inputOculto" type="radio" name="etiqueta">format_h4
+                                </span>
+                                <span class="botonIcono material-symbols-outlined centrado" title="p">
+                                    <input class="inputOculto" type="radio" name="etiqueta">view_headline
+                                </span>
+                                <span class="botonIcono material-symbols-outlined centrado" title="pre">
+                                    <input class="inputOculto" type="radio" name="etiqueta">article_person
+                                </span>
+                            </form>
 
-                <div class="cajaFormato">
-                    <div id="visor" class="visor centrado borderRadiusGrey"></div>
-                    <div class="textoSize borderRadiusGrey">
-                        <span id="textoSizeMas" class="boton material-symbols-outlined centrado">stat_1</span>
-                        <span id="textoSizeValor" class="valor centrado"></span>
-                        <span id="textoSizeMenos" class="boton material-symbols-outlined centrado">stat_minus_1</span>
+                            <div class="cajaFormato">
+                                <div id="visor" class="visor centrado borderRadiusGrey"></div>
+                                <div class="textoSize borderRadiusGrey">
+                                    <span id="textoSizeMas" class="boton material-symbols-outlined centrado">stat_1</span>
+                                    <span id="textoSizeValor" class="valor centrado"></span>
+                                    <span id="textoSizeMenos" class="boton material-symbols-outlined centrado">stat_minus_1</span>
+                                </div>
+                            </div>
+                        
+                            <form id="formatoLetra" class="formatoLetra borderRadiusGrey">
+                                <span class="botonIcono material-symbols-outlined centrado" title="left">
+                                    <input class="inputOculto" type="radio" name="alineacion">align_justify_flex_start
+                                </span>
+                                <span class="botonIcono material-symbols-outlined centrado" title="center">
+                                    <input class="inputOculto" type="radio" name="alineacion" checked>align_justify_space_even
+                                </span>
+                                <span class="botonIcono material-symbols-outlined centrado" title="right">
+                                    <input class="inputOculto" type="radio" name="alineacion">align_justify_flex_end
+                                </span>
+
+                                <span class="botonIcono material-symbols-outlined centrado" title="bolder">
+                                    <input class="inputOculto" type="checkbox">format_bold
+                                </span>
+                                <span class="botonIcono material-symbols-outlined centrado" title="italic">
+                                    <input class="inputOculto" type="checkbox">format_italic
+                                </span>
+                                <span class="botonIcono material-symbols-outlined centrado" title="underline">
+                                    <input class="inputOculto" type="checkbox">format_underlined
+                                </span>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            
-                <form id="formatoLetra" class="formatoLetra borderRadiusGrey">
-                    <span class="botonIcono material-symbols-outlined centrado" title="left">
-                        <input class="inputOculto" type="radio" name="alineacion">align_justify_flex_start
-                    </span>
-                    <span class="botonIcono material-symbols-outlined centrado" title="center">
-                        <input class="inputOculto" type="radio" name="alineacion" checked>align_justify_space_even
-                    </span>
-                    <span class="botonIcono material-symbols-outlined centrado" title="right">
-                        <input class="inputOculto" type="radio" name="alineacion">align_justify_flex_end
-                    </span>
-
-                    <span class="botonIcono material-symbols-outlined centrado" title="bolder">
-                        <input class="inputOculto" type="checkbox">format_bold
-                    </span>
-                    <span class="botonIcono material-symbols-outlined centrado" title="italic">
-                        <input class="inputOculto" type="checkbox">format_italic
-                    </span>
-                    <span class="botonIcono material-symbols-outlined centrado" title="underline">
-                        <input class="inputOculto" type="checkbox">format_underlined
-                    </span>
-                </form>
             </div>
         `
 
@@ -108,75 +121,86 @@ class opcionesCampoTexto extends HTMLElement {
             .contenedor {
                 width: 100%;
                 heigth: auto;
-                margin-top: 4px;
+                margin-bottom: 14px;
 
-                .etiquetas {
-                    display: flex;
-                    justify-content: space-between;
+                .contenedorDesplegable {
                     width: 100%;
-                    height: auto;
-                    margin-bottom: var(--margenVertical);
-                }
+                    height: 0;
+                    overflow: hidden;
+                    transition: .5s;
 
-                .cajaFormato {
-                    display: flex;
-                    justify-content: space-between;
-                    width: 100%;
-                    height: 100px;
-                    margin-bottom: var(--margenVertical);
-
-                    .visor {
-                        height: 100%;
-                        width: calc(100% - 54px);
-                        box-shadow: inset 2px 2px 8px grey;
-                        color: grey;
-                        overflow: hidden;
-
-                        .etiquetaCreada {
-                            font-weight: lighter;
-                        }
-                    }
-
-                    .textoSize {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                        align-items: center;
-                        width: 40px;
-                        color: grey;
+                    .contenedorPadding {
+                        width: 100%;
+                        height: auto;
+                        padding: 8px;
                         
-                        .boton {
+                        .etiquetas {
+                            display: flex;
+                            justify-content: space-between;
                             width: 100%;
+                            height: auto;
+                            margin-bottom: var(--margenVertical);
+                        }
 
-                            &:hover {
-                                color: red;
-                                font-weight: bolder;
-                                cursor: pointer;
+                        .cajaFormato {
+                            display: flex;
+                            justify-content: space-between;
+                            width: 100%;
+                            height: 100px;
+                            margin-bottom: var(--margenVertical);
+
+                            .visor {
+                                height: 100%;
+                                width: calc(100% - 54px);
+                                box-shadow: inset 2px 2px 8px grey;
+                                color: grey;
+                                overflow: hidden;
+
+                                .etiquetaCreada {
+                                    font-weight: lighter;
+                                }
+                            }
+
+                            .textoSize {
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: space-between;
+                                align-items: center;
+                                width: 40px;
+                                color: grey;
+                                
+                                .boton {
+                                    width: 100%;
+
+                                    &:hover {
+                                        color: red;
+                                        font-weight: bolder;
+                                        cursor: pointer;
+                                    }
+                                }
+
+                                .valor {
+                                    font-size: 16px;
+                                }
                             }
                         }
 
-                        .valor {
-                            font-size: 16px;
-                        }
-                    }
-                }
+                        .formatoLetra {
+                            display: flex;
+                            justify-content: space-between;
+                            width: 100%;
+                            heigth: var(--altoElementos);
 
-                .formatoLetra {
-                    display: flex;
-                    justify-content: space-between;
-                    width: 100%;
-                    heigth: var(--altoElementos);
-                    margin-bottom: var(--margenVertical);
-                    margin-bottom: var(--margenVertical);
-
-                    .botonIcono {
-                        border: none;
-                        top: 1px;
-                        font-size: 20px;
-                        
-                        &:nth-of-type(6) { 
-                            font-size: 22px;
-                            top: 3px;
+                            .botonIcono {
+                                border: none;
+                                top: 1px;
+                                font-size: 20px;
+                                
+                                &:nth-of-type(6) { 
+                                    font-size: 22px;
+                                    top: 3px;
+                                }
+                            }
                         }
                     }
                 }

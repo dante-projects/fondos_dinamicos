@@ -1,7 +1,7 @@
 import "./comunes/subComponentes/titulo.js"
 import "./comunes/subComponentes/rangoSimple.js"
-import "./comunes/funciones/eventosPesonalizados.js"
 import { capturarEvento } from "./comunes/funciones/eventosPesonalizados.js"
+import { abrirCerrar } from "./comunes/funciones/abrirCerrar.js"
 
 class selectorColor extends HTMLElement {
     constructor() {
@@ -9,8 +9,8 @@ class selectorColor extends HTMLElement {
         this.attachShadow({mode: "open"})
         this.componentesHijos = false
 
-        capturarEvento("titulo", (e) => {
-            this.abrirCerrar(e.detail)
+        capturarEvento("textoColor", (e) => {
+            abrirCerrar(this.shadowRoot.querySelector("#contenedorDesplegable"), e.detail)
         })
 
         capturarEvento("rangoColor", (e) => {
@@ -26,11 +26,10 @@ class selectorColor extends HTMLElement {
             this.valorCalculadoCod()
         })
 
-
         this.shadowRoot.innerHTML += `
             <div class="contenedor borderRadiusGrey">
-                <titulo-desplegable id="titulo" title="Color"></titulo-desplegable>
-                <div id="componente" class="componente">
+                <titulo-desplegable id="textoColor">Color</titulo-desplegable>
+                <div id="contenedorDesplegable" class="contenedorDesplegable">
                     <div class="boxPadding">
                         <div class="colorBox">
                             <div id="muestraBox" class="muestraBox fondoCuadrados">
@@ -99,7 +98,7 @@ class selectorColor extends HTMLElement {
                 width: 100%;
                 height: auto;
 
-                .componente {
+                .contenedorDesplegable {
                     width: 100%;
                     height: 0;
                     overflow: hidden;
@@ -108,7 +107,7 @@ class selectorColor extends HTMLElement {
                     .boxPadding {
                         width: 100%;
                         height: auto;
-                        padding: 10px;
+                        padding: 8px;
 
                         .colorBox {
                             display: flex;
@@ -217,10 +216,6 @@ class selectorColor extends HTMLElement {
         `
         this.shadowRoot.appendChild(estilo)      
 
-        this.abrirCerrar = (valor) => {
-            const componente = this.shadowRoot.querySelector("#componente")
-            componente.style.height = valor ? `${componente.scrollHeight}px` : "0"
-        }
         //valores iniciales
         this.color = 180
         this.saturacion = 100
@@ -245,6 +240,7 @@ class selectorColor extends HTMLElement {
     }
 
     connectedCallback() {
+
         this.rangoColor  = this.shadowRoot.querySelector("#rangoColor")
         this.rangoColor.colorThumb(this.color) 
         this.rangoColor.fondoHsl() 

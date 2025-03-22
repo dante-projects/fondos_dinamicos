@@ -16,15 +16,25 @@ class tituloDesplegable extends HTMLElement {
             <div class="contenedor borderRadiusGrey">
                 <div id="titulo" class="titulo centradoVertical"></div>
                 <span class="icono material-symbols-outlined">arrow_drop_down</span>
+                <div class="capaReactiva"></div>
             </div>
         `  
         
         const estilo = document.createElement("style")
         estilo.textContent = `
+            * {
+                box-sizing: border-box;
+            }
+
             .contenedor {
+                position: relative;
                 display: flex;
                 width: 100%;
                 height: 32px;
+
+                    &:hover .icono {
+                        color: red;
+                    }
 
                 .titulo {
                     display: flex;
@@ -33,12 +43,7 @@ class tituloDesplegable extends HTMLElement {
                     height: 100%;
                     color: grey;
                     text-indent: 10px;
-                    cursor: pointer;
                     transition: .5s .5s;
-
-                    &:hover +.icono {
-                        color: red;
-                    }
                 }
 
                 .icono {
@@ -50,27 +55,33 @@ class tituloDesplegable extends HTMLElement {
                     font-size: 30px;
                     color: grey;
                 }
+
+                .capaReactiva {
+                    position: absolute;
+                    width: 100%;
+                    height: 32px;
+                    cursor: pointer;
+                }
             }
         `
         this.shadowRoot.appendChild(estilo)
     }
 
     connectedCallback() {
-
         const titulo = this.shadowRoot.querySelector("#titulo")
-        !this.getAttribute("title") 
-            ? console.log(this, "Falta parametro [title]") 
-            : titulo.textContent = this.getAttribute("title")
+        const capaReactiva = this.shadowRoot.querySelector(".capaReactiva")
+        !this.getAttribute("id") 
+            ? console.log(this, "Falta parametro [id] en el componente padre") 
+            : titulo.textContent = this.textContent
 
         const abrirCerrar = () => {
             this.abierto = this.abierto ? false : true
         }
 
-        titulo.addEventListener("click", () => {
+        capaReactiva.addEventListener("click", () => {
             abrirCerrar()
-            publicarEvento("titulo", {detail: this.abierto})
+            publicarEvento(this.id, {detail: this.abierto})
         })
-
         this.estado = true
     }
 
